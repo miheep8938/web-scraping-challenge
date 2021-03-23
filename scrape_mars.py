@@ -11,50 +11,59 @@ def init_browser():
     browser = Browser('chrome', **executable_path, headless=False)
     return browser
 
+mars_dictionary = {}
 def scrape_info():
+    
+   
     browser = init_browser()
 
     #NASA 
     nasa_url = 'https://mars.nasa.gov/news'
     browser.visit(nasa_url)
 
-    html = browser.html
-    soup = bs(html, 'html.parser')
+    nasa_html = browser.html
+    soup = bs(nasa_html, 'html.parser')
 
     title_results = soup.find_all('div', class_='content_title')
     news_title = title_results[1].text
     paragraph_results = soup.find_all('div', class_= 'article_teaser_body')
     news_paragraph = paragraph_results[0].text
 
-    browser.quit()
+    # Dictionary entry from MARS NEWS
+    mars_dictionary['news_title'] = news_title
+    mars_dictionary['news_paragraph'] = news_paragraph
 
-    #JPL 
-    browser = init_browser()
+    # return mars_dictionary
+
+    #JPL - Featured Image
+
     jpl_url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
     browser.visit(jpl_url)
+    time.sleep(1)
     browser.click_link_by_partial_text('FULL IMAGE')
-    time.sleep(3)
+    time.sleep(1)
 
-    html = browser.html
-    soup = bs(html, 'html.parser')
 
-    results = soup.find('img', class_='fancybox-image').get("src")
-    image_path = f'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{results}'
+    jpl_html = browser.html
+    soup = bs(jpl_html, 'html.parser')
 
-    browser.quit()
-    #Facts
-    browser = init_browser()
+
+    featured_image_url = soup.find('img', class_='fancybox-image').get("src")
+    featured_image_url = f'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{featured_image_url}'
+    mars_dictionary['featured_image_url'] = featured_image_url
+
+
+    #Mars_Facts
+
     mars_fact_url = 'https://space-facts.com/mars/'
     tables = pd.read_html(mars_fact_url)
     df = tables[0]
     df.columns = ['Description', 'Value']
     html_table = df.to_html(header=False, index=False)
-
-    browser.quit()
+    mars_dictionary['mars_facts'] = html_table
 
 
     #Hemispheres
-    browser = init_browser()
     try:
         hemisphere_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
         shorten_url = 'https://astrogeology.usgs.gov/'
@@ -74,6 +83,7 @@ def scrape_info():
     
             hemisphere_dictionary = {"title": title, "image_url": image_url}
             hemisphere_list.append(hemisphere_dictionary)
+            mars_dictionary['hemisphere_list'] = hemisphere_list
             
     except:
         print("hemisphere error") 
@@ -86,21 +96,4 @@ def scrape_info():
 
     # Close the browser after scraping
     browser.quit()
-
-    mars_dictionary = {}
-    mars_dictionary['news_title'] = news_title,
-    mars_dictionary['news_paragraph'] = news_paragraph,
-    mars_dictionary['featured_image'] = image_path,
-    mars_dictionary['mars_table'] = html_table,
-    mars_dictionary["hemisphere_list"] = hemisphere_list
-
-
-    # {
-    #         "news_title": news_title,
-    #         "news_paragraph": news_paragraph,
-    #         "featured_image": results,
-    #         "mars_table": html_table, 
-    #         # "hemisphere_list": hemisphere_list
-    #     }
-    # Return results
     return mars_dictionary

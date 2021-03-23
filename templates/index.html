@@ -1,77 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Mission to Mars</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="../static/style.css">
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+
+
+
 </head>
 
-<body>
+<body class="text-white" style="background-image: url(https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fdam%2Fimageserve%2F765877054%2F960x0.jpg%3Ffit%3Dscale)">
   <div class="container">
 
-    <div class="jumbotron text-center border-bottom">
-      <h1 class="font-weight-bold">Mission to Mars</h1>
-      <p><a class="btn btn-primary btn-lg" href="../scrape" role="button">Scrape New Data</a></p>
+    <div class="jumbotron text-center border-bottom" style="background-color: transparent;">
+      <h1 style="padding-bottom: 20px;">Mission to Mars</h1>
+      <p><a class="btn btn-primary btn-lg" href="../scrape" style="background-color: rgb(15, 125, 216);padding:20px;font-weight:bold"
+          role="button">Scrape New Data</a></p>
     </div>
 
     <div class="row">
       <div class="col-md-12">
-        <h2><u>Latest Mars News</u></h2>
+        <h2 class="title">Latest Mars News</h2>
       </div>
     </div>
-  </br>
+    </br>
     <div class="row">
       <div class="col-md-12">
         <h4>{{mars.news_title}}</h4>
         <p>{{mars.news_paragraph}}</p>
       </div>
     </div>
-  <hr>
+    <hr>
     <div class="row">
-      <div class="col-md-8 border">
-        <h2 class=""><u>Featured Mars Image</u></h2> 
-        </br>
-        <img src="{{mars.featured_image}}" alt="Features Mars Image">
+      <!-- Left Image-->
+      <div class="col-md-8">
+        <h3>Featured Mars Image</h3>
+        <img src="{{mars.featured_image_url}}" style="max-width:100%; max-height: auto;" alt="Mars Featured Image">
       </div>
       <div class="col-md-4">
         <div class="border">
           <h5>Mars Facts</h5>
-            <table>"{{ mars.mars_table | safe}}"</table>
+          <table class="table">{{ mars.mars_facts | safe}}</table>
         </div>
       </div>
     </div>
-  <hr>
+    <hr>
     <div class="row">
       <div class="col-md-8 offset-4">
-        <h2 class="align-items-center"><u>Mars Hemispheres</u></h2>  
+        <h2 class="title">Mars Hemispheres</h2>
       </div>
     </div>
     </br>
-    <div class="row">       
-            {% for hemisphere in mars.hemisphere_list %} 
-              <div class="col-6 border">
-              </br>
-                    <div>
-                      <img width="512 px" height="512 px" src="{{hemisphere.image_url}}">
-                    </div>
+    <div class="row">
+      {% for hemisphere in mars.hemisphere_list %}
+      <div class="col-md-6">
+        </br>
+        <div>
+          <img width="80%" height="80%" src="{{hemisphere.image_url}}" class="thumbnail">
+        </div>
 
-                    <div>
-                      <h4> {{ hemisphere.title | safe }} </h4>  
-                    </div>
-            
-              </div>
-            {% endfor %}
-    </div> 
+        <div>
+          <h4> {{ hemisphere.title | safe }} </h4>
+        </div>
 
-  <hr>
-  
+      </div>
+      {% endfor %}
+    </div>
+
+    <hr>
+
 </body>
 
 </html>

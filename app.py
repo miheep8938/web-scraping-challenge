@@ -28,6 +28,8 @@ def scrape():
     mars_dictionary = mongo.db.mars_dictionary
     # Run the scrape function
     mars_data = scrape_mars.scrape_info()
+    # mars_data = scrape_mars.scrape_featured_image()
+    # mars_data = scrape_mars.scrape_facts()
 
     # Update the Mongo database using update and upsert=True
     mongo.db.mars_dictionary.update({}, mars_data, upsert=True)
